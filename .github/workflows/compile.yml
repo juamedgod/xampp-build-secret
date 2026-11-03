@@ -20,6 +20,8 @@ jobs:
 
 
     runs-on: ${{ matrix.runner }}
+    env:
+      BITNAMI_BUILD_DIRECTORY: "/opt/build"
     steps:
       - uses: actions/checkout@v4
       - name: Setup /bitnami dir
@@ -76,14 +78,17 @@ jobs:
           set -euo pipefail
           set -x
           cd src
+          export BITNAMI_BUILD_DIRECTORY=${{env.BITNAMI_BUILD_DIRECTORY}}
+          sudo mkdir "$BITNAMI_BUILD_DIRECTORY"
+          sudo chown "$USER" "$BITNAMI_BUILD_DIRECTORY"
           find /tmp/tarballs
-          tclkit createstack.tcl buildTarball xamppunixinstaller${{matrix.version}}stack ${{matrix.os}}
-          mkdir /bitnami/dist-${{matrix.version}}-${{matrix.os}}
-          mv /bitnami/xamppunixinstaller${{matrix.version}}stack-${{matrix.os}}/output/* /bitnami/dist-${{matrix.version}}-${{matrix.os}}
+          tclsh createstack.tcl buildTarball xamppunixinstaller${{matrix.version}}stack ${{matrix.os}}
+          mkdir "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"
+          mv $BITNAMI_BUILD_DIRECTORY/output/* "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v7
         with:
           name: xampp-${{matrix.version}}-${{matrix.os}}
           path: |
-            /bitnami/dist-${{matrix.version}}-${{matrix.os}}/*
+            $BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}/*
