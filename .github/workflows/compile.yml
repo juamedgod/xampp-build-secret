@@ -14,8 +14,8 @@ jobs:
         include:
           - os: linux-x64
             runner: ubuntu-22.04
-            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/tarballs-unix-202206.tgz"
-            base_tarball_sha256: "487e6ed38e35dda83ceee3fc59a8dbb6a11d018ed7c24a9e3db136d989a6b6f6"
+            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
+            base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
             extra_binaries: |
 
 
