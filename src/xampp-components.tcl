@@ -1150,9 +1150,7 @@ UseFtpUsers}]
                 }
             }
 
-            set id 0
-            catch {exec id -u} id
-            if {$::tcl_platform(user) == "root" || $id == "0" || [file writable /]} {
+            if {[amiroot]} {
                 foreach f {var/mysql htdocs/webalizer} {
                     logexec chown -R nobody [file join $destDir $f]
                 }
@@ -1237,9 +1235,8 @@ UseFtpUsers}]
 		file mkdir [file dirname $destination]
 		file copy -force $source $destination
 	    }
-            set id 0
-            catch {exec id -u} id
-            if {$::tcl_platform(user) == "root" || $id == "0" || [file writable /]} {
+
+            if {[amiroot]} {
                 logexec chown -R nobody [file join $destDir htdocs/[string trim $http_prefix /]]
             }
         }
@@ -1574,9 +1571,7 @@ UseFtpUsers}]
         }
         public method install {} {
             chain
-            set id 0
-            catch {exec id -u} id
-            if {$::tcl_platform(user) == "root" || $id == "0" || [file writable /]} {
+            if {[amiroot]} {
                 logexec chown nobody [file join [prefix] htdocs]
             }
             if { ![file exists [file join [prefix] modules mod_ssl.so ]] } {
@@ -2153,11 +2148,10 @@ UseFtpUsers}]
 	    }
         }
         public method build {} {
-	    if {[string match osx* [$be targetPlatform]]} {
-		xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {prefix = /usr/local} "prefix = [prefix]" {-o $(BINOWN) -g $(BINGRP)} {}]
-	    } else {
-		xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {prefix = /usr/local} "prefix = [prefix]"]
+	    if {![amiroot]} {
+		xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {-o $(BINOWN) -g $(BINGRP)} {}]
 	    }
+            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {prefix = /usr/local} "prefix = [prefix]"]
             chain
         }
     }

@@ -31,10 +31,14 @@ declareClass libpcap -parentClass library -name libpcap -version 1.9.0 -licenseR
         set ::opts(gdbm.prefix) [prefix]
     }
     public method install {} {
-        if { [$be cget -target] == "osx-x64" } {
-            # From Mac Ports
-            xampptcl::util::substituteParametersInFile [file join [srcdir] Makefile] \
-                [list {BINOWN = bin} {BINOWN = root} {BINGRP = bin} {BINGRP = wheel}]
+        if {![amiroot]} {
+            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {-o $(BINOWN) -g $(BINGRP)} {}]
+        } else {
+            if { [$be cget -target] == "osx-x64" } {
+                # From Mac Ports
+                xampptcl::util::substituteParametersInFile [file join [srcdir] Makefile] \
+                    [list {BINOWN = bin} {BINOWN = root} {BINGRP = bin} {BINGRP = wheel}]
+            }
         }
         chain
     }
