@@ -85,6 +85,7 @@ jobs:
           tclsh createstack.tcl buildTarball xamppunixinstaller${{matrix.version}}stack ${{matrix.os}}
           mkdir "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"
           mv $BITNAMI_BUILD_DIRECTORY/output/* "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"
+          shasum -a256 "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"/*gz > "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}/sha256"
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v7
