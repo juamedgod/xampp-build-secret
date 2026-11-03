@@ -6,11 +6,12 @@
        } {
            addComponents baseFiles
            addComponents m4 libtool ::xampp::pcre ::xampp::zlib ::xampp::libiconv
-           addComponents ::xampp::gettext ::xampp::cmake
+           addComponents ::xampp::gettext
+           # addComponents ::xampp::cmake
 
            # ming requires it
            addComponents bison flex
-           addComponents ::xampp::ncurses ::xampp::bzip2 ::xampp::libpng ::xampp::tiff ::xampp::jpeg ::xampp::freetype libwebp libzip gd ::xampp::opensslVersioned ::xampp::openldap libmcrypt ::xampp::curl ::xampp::imap ::xampp::expatLib ::xampp::libxml2 ::xampp::libxslt ::xampp::apr ::xampp::aprutil
+           addComponents ::xampp::ncurses6 ::xampp::bzip2 ::xampp::libpng ::xampp::tiff ::xampp::jpeg ::xampp::freetype libwebp libzip gd ::xampp::opensslVersioned ::xampp::openldap libmcrypt ::xampp::curl ::xampp::imap ::xampp::expatLib ::xampp::libxml2 ::xampp::libxslt ::xampp::apr ::xampp::aprutil
            addComponents chrpath ::xampp::oracleInstantclientLinuxX86Lib ::xampp::oracleInstantclientLinuxX86Sdk
            addComponents ::xampp::nghttp2 ::xampp::apache ::xampp::icu4c  ::xampp::freetds  ::xampp::sqlite  ::xampp::postgresql groff ::xampp::mariadb10 ::xampp::sablotron ::xampp::gdbm  ::xampp::perl libaio ::xampp::php ::xampp::phpPdfClasses ::xampp::fpdf ::xampp::ming ::xampp::pecl_radius ::xampp::pecl_ncurses ::xampp::modperl cpanArchiveZip cpanYAML cpanXSBuilder cpanIoZlib cpanBundleCpan cpanURI cpanIoCompress cpanHTML-Parser cpanHTML-Tagset cpanMakeMaker cpanParseRecDescent cpanDevelCheckLib cpanDBI cpanDBD-mariadb ::xampp::cpanLWP cpanDBDPgPP cpanDBD-SQLite ::xampp::libapreq2 ::xampp::zziplib ::xampp::proftpd ::xampp::mhash ::xampp::webalizer ::xampp::phpmyadmin
 
@@ -105,7 +106,7 @@
         replaceComponent gd {libltdl ::xampp::gd}
         replaceComponent ::xampp::MDB {{::xampp::MDB2}}
         replaceComponent ::xampp::HTML_Form {{::xampp::HTML_QuickForm2}}
-        removeComponents [list ::xampp::pecl_radius ::xampp::XML_HTMLSax ::xampp::xdebug ::xampp::Stream_SHM]
+        removeComponents [list ::xampp::pecl_radius ::xampp::pecl_ncurses ::xampp::XML_HTMLSax ::xampp::xdebug ::xampp::Stream_SHM]
     }
     public method componentsToBuild {} {
         if {[$be cget -buildType]=="fromTarball"} {
@@ -263,6 +264,7 @@
     constructor {environment} {
         chain $environment
     } {
+        set baseTarball xampp85-[$be targetPlatform]
     }
 }
 
@@ -279,7 +281,7 @@
         replaceComponent ::xampp::libiconv libiconvOsxNative
         replaceComponent ::xampp::libxml2 libxml2OsxNative
         replaceComponent ::xampp::libxslt libxsltOsxNative
-        replaceComponent ::xampp::cmake {{cmake version 3.9.6}}
+        # replaceComponent ::xampp::cmake {{cmake version 3.9.6}}
         replaceComponent libmcrypt {autoconf pkgconfig libtool2 ::xampp::libmcrypt}
     }
     public method preparefordist {} {
