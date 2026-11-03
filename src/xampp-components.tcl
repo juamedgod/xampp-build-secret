@@ -222,7 +222,7 @@ namespace eval xampp {
             chain $environment
         } {
             set name cmake
-            set version 3.6.1
+            set version 3.18.6
         }
         public method configureOptions {} {
             #return [list --system-curl]
@@ -601,7 +601,7 @@ namespace eval xampp {
             chain $environment
         } {
             set name "zlib"
-            set version 1.2.11
+            set version 1.3.2
             set licenseRelativePath README
         }
         public method setEnvironment {} {
@@ -681,7 +681,7 @@ namespace eval xampp {
             chain $environment
         } {
             set name "libpng"
-            set version 1.6.37
+            set version 1.6.59
             set licenseRelativePath LICENSE
             set licenseNotes http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
         }
@@ -765,7 +765,7 @@ namespace eval xampp {
             chain $environment
         } {
             set name expat
-            set version 2.0.1
+            set version 2.9.0
             set licenseRelativePath COPYING
             set licenseNotes "MIT http://www.jclark.com/xml/copying.txt"
         }
@@ -855,7 +855,7 @@ namespace eval xampp {
         inherit xamppLibraryCommon opensslUnixVersioned
         constructor {environment} {
             opensslUnixVersioned::constructor $environment
-	    set supportsParallelBuild 0
+	    set supportsParallelBuild 1
         } {
             set version [versions::get "OpenSSL" stable]
         }
@@ -888,9 +888,9 @@ namespace eval xampp {
 	    }
 	    xampptcl::util::substituteParametersInFileRegex Makefile [list {\nSHARED_LDFLAGS=} "\nSHARED_LDFLAGS=-Wl,-rpath -Wl,[prefix]/lib "]
 	    # Necessary because we removed some algorithms
-	    logexec [make] depend
+	    eval logexec [make] depend
 	    setVersionInformation
-	    logexec [make]
+	    eval logexec [make]
 	}
         public method setVersionInformation {} {
             if {[string match linux* [$be cget -target]]} {
@@ -923,11 +923,16 @@ namespace eval xampp {
             chain $environment
         } {
             set name "openldap"
-            set version 2.4.48
+            set version 2.7.2
             set licenseRelativePath LICENSE
         }
         public method configureOptions {} {
             return [concat [chain] [list --disable-slapd --disable-slurpd --enable-static=no --with-tls=auto]]
+        }
+
+        public method build {} {
+            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in  [list {SUBDIRS= include libraries clients servers tests doc} {SUBDIRS= include libraries clients servers tests}]
+            chain
         }
         public method install {} {
             chain
@@ -1032,7 +1037,7 @@ namespace eval xampp {
         } {
             set name "xampp-skeleton"
             set version 1.8.6
-            set rev 10
+            set rev 12
             set tarballName xampp-skeleton-dev-unix-${version}-${rev}
             set licenseRelativePath ""
             set licenseNotes ""
@@ -1091,6 +1096,7 @@ UseFtpUsers}]
             } else {
                 set destDir [file join [prefix] lampp]
             }
+            file mkdir $destDir
             file delete -force $destDir/etc/openssl.cnf
             file delete -force $destDir/htdocs
             foreach f [glob [srcdir]/*] {
@@ -1141,7 +1147,7 @@ UseFtpUsers}]
         } {
             set name "xampp-skeleton"
             set version 1.8.6
-            set rev 11
+            set rev 12
             set tarballName xampp-skeleton-dev-unix-${version}-${rev}
         }
     }
@@ -1161,7 +1167,7 @@ UseFtpUsers}]
 		set platform linux
 	    }
             set name "xampp-htdocs-$platform"
-            set version 20250916
+            set version 20221122
             set rev 0
             set tarballName $name-$version.tar.gz
             set licenseRelativePath ""
@@ -1188,6 +1194,7 @@ UseFtpUsers}]
             } else {
                 set destDir [file join [prefix] lampp]
             }
+            file mkdir $destDir
             # clean up htdocs
             file delete -force [file join $destDir htdocs [string trim $http_prefix /]]
 	    set directory [lindex [glob -directory [extractDirectory] *] 0]
@@ -1246,12 +1253,16 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "curl"
-            set version 7.53.1
+            set version 8.23.0
             set licenseRelativePath COPYING
             set licenseNotes http://curl.haxx.se/legal/licmix.html
         }
         public method configureOptions {} {
-            return [concat [chain] [list --with-ssl=[prefix] --with-ca-bundle=[file join [$be cget -output] share/curl/curl-ca-bundle.crt]]]
+            return [concat [chain] [list --without-libpsl --with-ssl=[prefix] --with-ca-bundle=[file join [$be cget -output] share/curl/curl-ca-bundle.crt]]]
+        }
+        public method setEnvironment {} {
+            chain
+            set ::opts(curl.prefix) [prefix]
         }
         public method build {} {
             foreach var {LDFLAGS CPPFLAGS CFLAGS} {
@@ -1301,7 +1312,7 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "libiconv"
-            set version 1.15
+            set version 1.19
             set licenseRelativePath COPYING.LIB
         }
         public method setEnvironment {} {
@@ -1475,7 +1486,7 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "apr"
-            set version 1.5.2
+            set version 1.7.6
             set licenseRelativePath LICENSE
         }
         public method configureOptions {} {
@@ -1497,7 +1508,7 @@ UseFtpUsers}]
             set licenseRelativePath LICENSE
             #lappend patchList update_child_status_internal_segfault.patch
             set patchLevel 1
-            set supportsParallelBuild 0
+            set supportsParallelBuild 1
             set tarballName httpd-$version.tar.gz
         }
         public method srcdir {} {
@@ -1546,13 +1557,16 @@ UseFtpUsers}]
         } {
             set name "icu4c"
             set version [versions::get "ICU4C" stable]
-            set supportsParallelBuild 0
+            set supportsParallelBuild 1
             set licenseRelativePath ../license.html
             set tVersion [string map {. _} $version]
             set tarballName icu4c-$tVersion-src
             set licenseNotes http://source.icu-project.org/repos/icu/icu/trunk/license.html
-            set supportsParallelBuild 0
+            set supportsParallelBuild 1
 
+        }
+        public method setEnvironment {} {
+            set ::opts(icu.prefix) [prefix]
         }
 
         public method srcdir {} {
@@ -1935,6 +1949,7 @@ UseFtpUsers}]
             set ::env(RELEASE_CXXFLAGS) "$releaseCxxFlags -I[prefix]/include/ncurses"
 
         }
+
         public method setEnvironment {} {
 	    set ::opts(ncurses.prefix) [prefix]
             addIncludesDir [prefix]/include/ncurses
@@ -1945,6 +1960,30 @@ UseFtpUsers}]
         }
     }
 
+     ::itcl::class ncurses6 {
+        inherit ncurses
+        constructor {environment} {
+            chain $environment
+        } {
+            set version 6.6
+        }
+        public method install {} {
+            chain
+            set major [lindex [split $version .] 0]
+            foreach lib {form menu ncurses panel} {
+                exec ln -sf lib${lib}w.so.${major} [file join [$be cget -output] lib lib${lib}.so]
+                exec ln -sf lib${lib}w.so.${major} [file join [$be cget -output] lib lib${lib}.so.${major}]
+                exec ln -sf lib${lib}w.a [file join [$be cget -output] lib lib${lib}.a]
+                exec ln -sf lib${lib}w_g.a [file join [$be cget -output] lib lib${lib}_g.a]
+                puts "ln -sf lib${lib}w.so.${major} [file join [$be cget -output] lib lib${lib}]"
+            }
+            exec ln -sf "ncursesw" [file join [$be cget -output] include ncurses]
+        }
+        public method configureOptions {} {
+            return [concat [chain] [list --enable-widec --enable-symlinks]]
+        }
+    }
+
 
     ::itcl::class perl {
         inherit xamppLibrary
@@ -1952,7 +1991,11 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "perl"
-            set version [versions::get "Perl" "stable"]
+            if {[string match windows* [$be targetPlatform]]} {
+                set version [versions::get "Perl-windows" "stable"]
+            } else {
+                set version [versions::get "Perl" "stable"]
+            }
             set licenseRelativePath Copying
         }
         public method configureOptions {} {
@@ -1983,7 +2026,8 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "freetds"
-            set version 0.91
+            set version 1.5.16
+            set licenseRelativePath COPYING.txt
         }
         public method configureOptions {} {
             return [concat [chain] [list --enable-shared --with-ssl]]
@@ -2145,6 +2189,7 @@ UseFtpUsers}]
         } {
             set name "zziplib"
             set version 0.13.23
+            set supportsParallelBuild 0
             # this one requires python, not available in the xampp chroot...
             #set version 0.13.62
             set licenseRelativePath COPYING.LIB
@@ -2153,6 +2198,8 @@ UseFtpUsers}]
             return [concat [chain] [list --with-zlib=[prefix]]]
         }
         public method build {} {
+
+            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in  [list {zzip zzipwrap bins test docs} {zzip zzipwrap bins test}]
             xampptcl::util::substituteParametersInFile [srcdir]/bins/zziptest.c [list {(char *)hdr += hdr->d_reclen;} {hdr = (char *)hdr + hdr->d_reclen;}]
             chain
         }
@@ -2225,11 +2272,11 @@ UseFtpUsers}]
         }
         public method cmakeOptions {} {
             return [list -DCMAKE_INSTALL_PREFIX=[$be cget -output] -DENABLE_FONTCONFIG=0 -DENABLE_XPM=0 \
-                        -DENABLE_PNG=1 -DPNG_LIBRARY=[$be cget -output] -DPNG_PNG_INCLUDE_DIR=[$be cget -output]/include \
-                        -DENABLE_JPEG=1 -DJPEG_LIBRARY=[$be cget -output] -DJPEG_INCLUDE_DIR=[$be cget -output]/include \
-                        -DENABLE_TIFF=1 -DTIFF_LIBRARY=[$be cget -output] -DTIFF_INCLUDE_DIR=[$be cget -output]/include \
-                        -DENABLE_FREETYPE=1 -DFREETYPE_LIBRARY=[$be cget -output] -DFREETYPE_INCLUDE_DIRS=[$be cget -output]/include \
-                        -DENABLE_WEBP=1 -DWEBP_LIBRARY=[$be cget -output]]
+                        -DENABLE_PNG=1  -DPNG_PNG_INCLUDE_DIR=[$be cget -output]/include \
+                        -DENABLE_JPEG=1 -DJPEG_INCLUDE_DIR=[$be cget -output]/include \
+                        -DENABLE_TIFF=1  -DTIFF_INCLUDE_DIR=[$be cget -output]/include \
+                        -DENABLE_FREETYPE=1 -DFREETYPE_INCLUDE_DIRS=[$be cget -output]/include \
+                        -DENABLE_WEBP=1 -DWEBP_INLUDE_DIR=[$be cget -output]/include]
         }
 
         public method build {} {
@@ -2237,9 +2284,9 @@ UseFtpUsers}]
 
             # GD needs special flags
             set oldLdflags "$::env(LDFLAGS)"
-            set ::env(LDFLAGS) "$::env(LDFLAGS) -lpng -ljpeg -lz -ltiff -lfreetype"
+            set ::env(LDFLAGS) "$::env(LDFLAGS) -lpng -ljpeg -lz -ltiff -lfreetype -lwebp"
             eval logexec cmake . [cmakeOptions]
-
+            
             eval logexec [make]
 
             # Restore LDFLAGS
@@ -2347,7 +2394,7 @@ UseFtpUsers}]
             chain $environment
         } {
             set name modperl
-            set version 2.0.12
+            set version 2.0.13
             set licenseRelativePath LICENSE
             set tarballName mod_perl-$version
         }
@@ -2435,7 +2482,7 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "apr-util"
-            set version 1.5.4
+            set version 1.6.5
             set licenseRelativePath LICENSE
         }
         public method configureOptions {} {
@@ -2529,7 +2576,7 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
             set fullname PHP
             set version [::xampp::php::getXAMPPVersion 74]
             set licenseRelativePath LICENSE
-            set supportsParallelBuild 0
+            set supportsParallelBuild 1
         }
 
         public proc getXAMPPVersion {id} {
@@ -2559,7 +2606,7 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
             # they had this and interbase compiled under /opt/interbase
             # --with-interbase=shared,/opt/interbase
 
-            set opts [list --prefix=[prefix] --with-apxs2=[prefix]/bin/apxs --with-config-file-path=[prefix]/etc --with-mysql=mysqlnd --enable-inline-optimization --disable-debug \
+            set opts [list --prefix=[prefix]  --with-apxs2=[prefix]/bin/apxs --with-config-file-path=[prefix]/etc --with-mysql=mysqlnd --enable-inline-optimization --disable-debug \
                           --enable-bcmath --enable-calendar --enable-ctype --enable-exif --enable-ftp --enable-gd-native-ttf --enable-magic-quotes --enable-shmop \
                           --disable-sigchild --enable-sysvsem --enable-sysvshm --enable-wddx --with-gdbm=[prefix] --with-jpeg-dir=[prefix] --with-png-dir=[prefix] \
                           --with-freetype-dir=[prefix] --with-zlib=yes --with-zlib-dir=[prefix] --with-openssl=[prefix] --with-xsl=[prefix] --with-ldap=[prefix] \
@@ -2610,8 +2657,12 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
                     [list {wget http://pear.php.net/install-pear-nozlib.phar -nd -P pear/} {ls pear/install-pear-nozlib.phar}]
             }
 
-            showEnvironmentVars
 
+            # foreach {var comp} {LIBXML libxml2 OPENSSL openssl SQLITE sqlite ZLIB zlib CURL curl PNG libpng JPEG jpegsrc FREETYPE2 freetype ICU icu XSL libxslt LIBZIP libzip} {
+            #     set ::env(${var}_CFLAGS) "-I$::opts(${comp}.prefix)/include"
+            #     set ::env(${var}_LIBS) "-L$::opts(${comp}.prefix)/lib"
+            # }
+            showEnvironmentVars
             if {[$be targetPlatform] == "osx-x64"} {
                 file mkdir [srcdir]/configure-libs
                 foreach f [glob [prefix]/lib/libbz2.*] {

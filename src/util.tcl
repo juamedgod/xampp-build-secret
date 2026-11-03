@@ -914,37 +914,58 @@ fi
 }
 
 proc includeCplusplus {be {destination {}}} {
-    set libDir "lib"
+    set libDirs {lib}
     if {[$be cget -target] == "linux-x64"} {
-	set libDir "lib64"
+	set libDirs {lib64 lib/x86_64-linux-gnu}
     }
     if {$destination == ""} {
 	set destination [file join [$be cget -output] common lib]
     }
     if {[$be targetPlatform] == "linux-x64" || [$be targetPlatform] == "linux"} {
-
-	if [file exists [glob -nocomplain [$be cget -builddep]/gcc-*]] {
-	    foreach f [glob [$be cget -builddep]/gcc-*/$libDir/libstdc++.*] {
-		file copy -force  $f $destination
-	    }
-	} else {
-	    foreach f [glob /usr/$libDir/libstdc++.*] {
-		file copy -force  $f $destination
-	    }
-	}
+        set done 0
+        foreach libDir $libDirs {
+            if [file exists [glob -nocomplain [$be cget -builddep]/gcc-*]] {
+                foreach f [glob [$be cget -builddep]/gcc-*/$libDir/libstdc++.*] {
+                    file copy -force  $f $destination
+                    set done 1
+                }
+            } else {
+                foreach f [glob -nocomplain /usr/$libDir/libstdc++.*] {
+                    file copy -force  $f $destination
+                    set done 1
+                }
+            }
+            if {$done} {
+                break
+            }
+        }
+        if {!$done} {
+            error "Cannot include libstdc++" XAMPPERROR
+        }
     }
 }
 proc includeLibGcc {be {destination {}}} {
-    set libDir "lib"
+    set libDirs {lib}
+
     if {[$be cget -target] == "linux-x64"} {
-	set libDir "lib64"
+	set libDirs {lib64 usr/lib/x86_64-linux-gnu}
     }
     if {$destination == ""} {
 	set destination [file join [$be cget -output] common lib]
     }
     if {[$be targetPlatform] == "linux-x64" || [$be targetPlatform] == "linux"} {
-        foreach f [glob /$libDir/libgcc_s.*] {
-            file copy -force  $f $destination
+        set done 0
+        foreach libDir $libDirs {
+            foreach f [glob -nocomplain /$libDir/libgcc_s.*] {
+                file copy -force  $f $destination
+                set done 1
+            }
+            if {$done} {
+                break
+            }
+        }
+        if {!$done} {
+            error "Cannot include libgcc_s" XAMPPERROR
         }
     }
 }
@@ -1642,7 +1663,8 @@ namespace eval xampptcl::util {
         }
         return $result
     }
-    proc copyDirectory {origin destination} {
+proc copyDirectory {origin destination} {
+    puts "$origin -> $destination"
         if {$::tcl_platform(os) == "Darwin"} {
             exec cp -Rp $origin $destination
         } else {
