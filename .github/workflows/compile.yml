@@ -41,11 +41,11 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
              ca-certificates file m4 gcc g++ make perl patch unzip bzip2 curl python3 zip git ninja-build \
              pkg-config cmake \
-             p7zip-full p7zip-rar tcl tk tcllib itcl3 tcl-vfs tdom \
-          curl --silent -L -o tclkit 'https://tclkits.rkeene.org/fossil/raw/tclkit-8.5.17-rhel5-x86_64?name=76a197fe41359daaf4f90a2001f46675b3667e26'
+             p7zip-full p7zip-rar tcl tk tcllib itcl3 tcl-vfs tdom && rm -rf /var/lib/apt/lists/*
+          curl --fail --show-error --silent -L -o tclkit 'https://tclkits.rkeene.org/fossil/raw/tclkit-8.5.17-rhel5-x86_64?name=76a197fe41359daaf4f90a2001f46675b3667e26'
           chmod 755 tclkit
           sudo mv tclkit /usr/local/bin
-             && rm -rf /var/lib/apt/lists/*
+
       - name: Get tarballs
         id: get-tarballs
         if: steps.cache-tarballs.outputs.cache-hit != 'true'
