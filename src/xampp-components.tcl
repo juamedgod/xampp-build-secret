@@ -2356,23 +2356,10 @@ UseFtpUsers}]
                         -DENABLE_FREETYPE=1 -DFREETYPE_INCLUDE_DIRS=[$be cget -output]/include \
                         -DENABLE_WEBP=1 -DWEBP_INCLUDE_DIR=[$be cget -output]/include/webp]
         }
-
-        public method build {} {
-            cd [srcdir]
-
-            # GD needs special flags
-            set oldLdflags "$::env(LDFLAGS)"
-            set ::env(LDFLAGS) "$::env(LDFLAGS) -lpng -ljpeg -lz -ltiff -lfreetype -lwebp"
-            eval logexec cmake . [cmakeOptions]
-            
-            eval logexec [make]
-
-            # Restore LDFLAGS
-            set ::env(LDFLAGS) "$oldLdflags"
-
-            # Mark build as complete
-            ::xampptcl::file::write [file join [srcdir] .buildcomplete] {}
+		 public method configureOptions {} {
+            return [concat [chain] [list --without-fontconfig --without-xpm --with-png=[prefix] --with-zlib=[prefix] --with-jpeg=[prefix] --with-tiff=[prefix] --with-freetype=[prefix] --with-webp=[prefix]]]
         }
+
         public method install {} {
             # Avoid issue setting mkdir command before running make
             xampptcl::util::substituteParametersInFileRegex [srcdir]/Makefile \
