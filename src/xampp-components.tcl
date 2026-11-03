@@ -1150,9 +1150,7 @@ UseFtpUsers}]
                 }
             }
 
-            set id 0
-            catch {exec id -u} id
-            if {$::tcl_platform(user) == "root" || $id == "0" || [file writable /]} {
+            if {[amiroot]} {
                 foreach f {var/mysql htdocs/webalizer} {
                     logexec chown -R nobody [file join $destDir $f]
                 }
@@ -1199,7 +1197,7 @@ UseFtpUsers}]
 		set platform linux
 	    }
             set name "xampp-htdocs-$platform"
-            set version 20221122
+            set version 20261104
             set rev 0
             set tarballName $name-$version.tar.gz
             set licenseRelativePath ""
@@ -1237,9 +1235,8 @@ UseFtpUsers}]
 		file mkdir [file dirname $destination]
 		file copy -force $source $destination
 	    }
-            set id 0
-            catch {exec id -u} id
-            if {$::tcl_platform(user) == "root" || $id == "0" || [file writable /]} {
+
+            if {[amiroot]} {
                 logexec chown -R nobody [file join $destDir htdocs/[string trim $http_prefix /]]
             }
         }
@@ -1290,7 +1287,7 @@ UseFtpUsers}]
             set licenseNotes http://curl.haxx.se/legal/licmix.html
         }
         public method configureOptions {} {
-            return [concat [chain] [list --without-libpsl --with-ssl=[prefix] --with-ca-bundle=[file join [$be cget -output] share/curl/curl-ca-bundle.crt]]]
+            return [concat [chain] [list --without-libpsl --with-ssl=[prefix] --without-nghttp2 --without-libidn2 --with-ca-bundle=[file join [$be cget -output] share/curl/curl-ca-bundle.crt]]]
         }
         public method setEnvironment {} {
             chain
@@ -1562,6 +1559,8 @@ UseFtpUsers}]
                                          --enable-authnz-ldap --enable-ipv6 --enable-dbd --enable-https --with-nghttp2=[prefix] --with-mysql=[prefix] --with-apr=[prefix]/bin/apr-1-config \
                                          --with-apr-util=[prefix]/bin/apu-1-config --with-pcre=[prefix] --enable-modules=all]]
             lappend list --enable-ssl --with-ssl=$::opts(openssl.prefix)
+
+            lappend list --disable-brotli
             return $list
         }
         public method build {} {
@@ -1574,9 +1573,7 @@ UseFtpUsers}]
         }
         public method install {} {
             chain
-            set id 0
-            catch {exec id -u} id
-            if {$::tcl_platform(user) == "root" || $id == "0" || [file writable /]} {
+            if {[amiroot]} {
                 logexec chown nobody [file join [prefix] htdocs]
             }
             if { ![file exists [file join [prefix] modules mod_ssl.so ]] } {
@@ -1964,7 +1961,7 @@ UseFtpUsers}]
             showEnvironmentVars
 
             # Start building
-            eval logexec cmake . -DCMAKE_INSTALL_PREFIX=[prefix] -DINSTALL_PLUGINDIR=lib/mysql/plugin -DENABLED_LOCAL_INFILE=ON -DMYSQL_UNIX_ADDR=[prefix]/var/mysql/mysql.sock -DINSTALL_SBINDIR=sbin -DSYSCONFDIR=[prefix]/etc  -DDEFAULT_SYSCONFDIR=[prefix]/etc -DMYSQL_DATADIR=[prefix]/var/mysql -DINSTALL_INFODIR=[prefix]/info -DWITH_SSL=system -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_PERFSCHEMA_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1  -DOPENSSL_INCLUDE_DIR=[prefix]/include -DOPENSSL_ROOT_DIR=[prefix]/ -DINSTALL_SCRIPTDIR=[prefix]/bin -DINSTALL_SUPPORTFILESDIR=[prefix]/share/mysql -DCMAKE_PREFIX_PATH=[prefix]/include/ncurses/ -DCURSES_INCLUDE_PATH=[prefix]/include/ncurses/ -DPLUGIN_TOKUDB=NO -DWITHOUT_MROONGA_STORAGE_ENGINE=YES
+            eval logexec cmake . -DCMAKE_INSTALL_PREFIX=[prefix] -DINSTALL_PLUGINDIR=lib/mysql/plugin -DENABLED_LOCAL_INFILE=ON -DMYSQL_UNIX_ADDR=[prefix]/var/mysql/mysql.sock -DINSTALL_SBINDIR=sbin -DSYSCONFDIR=[prefix]/etc  -DDEFAULT_SYSCONFDIR=[prefix]/etc -DMYSQL_DATADIR=[prefix]/var/mysql -DINSTALL_INFODIR=[prefix]/info -DWITH_SSL=system -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_PERFSCHEMA_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1 -DWITH_PARTITION_STORAGE_ENGINE=1  -DOPENSSL_INCLUDE_DIR=[prefix]/include -DOPENSSL_ROOT_DIR=[prefix]/ -DINSTALL_SCRIPTDIR=[prefix]/bin -DINSTALL_SUPPORTFILESDIR=[prefix]/share/mysql -DCMAKE_PREFIX_PATH=[prefix]/include/ncurses/ -DCURSES_INCLUDE_PATH=[prefix]/include/ncurses/ -DPLUGIN_ROCKSDB=NO -DPLUGIN_TOKUDB=NO -DWITHOUT_MROONGA_STORAGE_ENGINE=YES -DPLUGIN_PROVIDER_LZ4=NO -DPLUGIN_PROVIDER_LZO=NO  -DCLIENT_PLUGIN_ZSTD=OFF -DPLUGIN_PROVIDER_LZMA=NO
 
             # MariaDB is intended to be compiled using the OS-X system "libtool" library which includes the "-static" option.
             # The GNU "libtool" we add as a build dependency, since PHP requires, it does not have that option.
@@ -2005,11 +2002,6 @@ UseFtpUsers}]
             set version 5.9
             set licenseRelativePath ANNOUNCE
             set licenseNotes http://www.gnu.org/software/ncurses/ncurses.html
-           if { [$be cget -target] == "osx-x64" } {
-               # Issue http://lists.gnu.org/archive/html/bug-ncurses/2011-04/msg00002.html
-               set patchStrip 1
-               set patchList {ncurses-clang.patch}
-           }
         }
         public method build {} {
             chain
@@ -2153,11 +2145,10 @@ UseFtpUsers}]
 	    }
         }
         public method build {} {
-	    if {[string match osx* [$be targetPlatform]]} {
-		xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {prefix = /usr/local} "prefix = [prefix]" {-o $(BINOWN) -g $(BINGRP)} {}]
-	    } else {
-		xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {prefix = /usr/local} "prefix = [prefix]"]
+	    if {![amiroot]} {
+		xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {-o $(BINOWN) -g $(BINGRP)} {}]
 	    }
+            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {prefix = /usr/local} "prefix = [prefix]"]
             chain
         }
     }
@@ -2362,23 +2353,10 @@ UseFtpUsers}]
                         -DENABLE_FREETYPE=1 -DFREETYPE_INCLUDE_DIRS=[$be cget -output]/include \
                         -DENABLE_WEBP=1 -DWEBP_INCLUDE_DIR=[$be cget -output]/include/webp]
         }
-
-        public method build {} {
-            cd [srcdir]
-
-            # GD needs special flags
-            set oldLdflags "$::env(LDFLAGS)"
-            set ::env(LDFLAGS) "$::env(LDFLAGS) -lpng -ljpeg -lz -ltiff -lfreetype -lwebp"
-            eval logexec cmake . [cmakeOptions]
-            
-            eval logexec [make]
-
-            # Restore LDFLAGS
-            set ::env(LDFLAGS) "$oldLdflags"
-
-            # Mark build as complete
-            ::xampptcl::file::write [file join [srcdir] .buildcomplete] {}
+		 public method configureOptions {} {
+            return [concat [chain] [list --without-fontconfig --without-xpm --with-png=[prefix] --with-zlib=[prefix] --with-jpeg=[prefix] --with-tiff=[prefix] --with-freetype=[prefix] --with-webp=[prefix]]]
         }
+
         public method install {} {
             # Avoid issue setting mkdir command before running make
             xampptcl::util::substituteParametersInFileRegex [srcdir]/Makefile \
@@ -2725,7 +2703,7 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
 
             # Specific options for PHP 7.4.x
             if {[xampptcl::util::compareVersions $version "7.4.0"] >= 0} {
-                lappend opts --with-pear --enable-gd --with-jpeg --with-libwebp --with-freetype --with-zip
+                lappend opts --with-pear --enable-gd --with-jpeg --with-libwebp --with-freetype --with-zip=[prefix]
             }
 
             set opts [listFilter $opts [list --with-oci8*]]
@@ -2759,6 +2737,9 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
             # }
             showEnvironmentVars
             if {[string match osx* [$be targetPlatform]]} {
+
+                set ::env(LIBZIP_LIBS) "-L[prefix]/lib -lzip"
+                set ::env(LIBZIP_CFLAGS) "-I[prefix]/include"
                 xampptcl::util::substituteParametersInFile ./configure [list {$BZ2_SHARED_LIBADD} "-Wl,-rpath,[prefix]/lib"]
                 #     file mkdir [srcdir]/configure-libs
                 foreach f [glob [prefix]/lib/libbz2.*] {

@@ -31,10 +31,14 @@ declareClass libpcap -parentClass library -name libpcap -version 1.9.0 -licenseR
         set ::opts(gdbm.prefix) [prefix]
     }
     public method install {} {
-        if { [$be cget -target] == "osx-x64" } {
-            # From Mac Ports
-            xampptcl::util::substituteParametersInFile [file join [srcdir] Makefile] \
-                [list {BINOWN = bin} {BINOWN = root} {BINGRP = bin} {BINGRP = wheel}]
+        if {![amiroot]} {
+            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in [list {-o $(BINOWN) -g $(BINGRP)} {}]
+        } else {
+            if { [$be cget -target] == "osx-x64" } {
+                # From Mac Ports
+                xampptcl::util::substituteParametersInFile [file join [srcdir] Makefile] \
+                    [list {BINOWN = bin} {BINOWN = root} {BINGRP = bin} {BINGRP = wheel}]
+            }
         }
         chain
     }
@@ -877,7 +881,12 @@ includesdir = ${includedir}}] 1
         cd [srcdir]
         file mkdir [srcdir]/build
         cd [srcdir]/build
-        eval logexec cmake .. -DCMAKE_INSTALL_PREFIX=[prefix] -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+        set cmakeArgs [list -DCMAKE_INSTALL_PREFIX=[prefix] -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_NETTLE=OFF -DENABLE_GNUTLS=OFF -DENABLE_MBEDTLS=OFF -DBUILD_REGRESS=OFF  -DBUILD_EXAMPLES=OFF]
+        if {[string match osx* [$be cget -target]]} {
+            lappend cmakeArgs {-DENABLE_OPENSSL=OFF}
+        }
+		
+        eval logexec cmake .. $cmakeArgs
         eval logexec [make]
         if {[$be cget -target] == "osx-x64"} {
             set ::env(DYLD_LIBRARY_PATH) $oldDYLD
