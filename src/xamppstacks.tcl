@@ -7,7 +7,7 @@
            addComponents baseFiles
            addComponents m4 libtool ::xampp::pcre ::xampp::zlib ::xampp::libiconv
            addComponents ::xampp::gettext
-           # addComponents ::xampp::cmake
+	   # addComponents ::xampp::cmake
 
            # ming requires it
            addComponents bison flex
@@ -278,11 +278,14 @@
         replaceComponent ::xampp::zziplib {{::xampp::zziplib version 0.13.62}}
         replaceComponent ::xampp::oracleInstantclientLinuxX86Lib ::xampp::oracleInstantclientOsxX64Lib
         replaceComponent ::xampp::oracleInstantclientLinuxX86Sdk ::xampp::oracleInstantclientOsxX64Sdk
-        replaceComponent ::xampp::libiconv libiconvOsxNative
+        # replaceComponent ::xampp::libiconv libiconvOsxNative
         replaceComponent ::xampp::libxml2 libxml2OsxNative
         replaceComponent ::xampp::libxslt libxsltOsxNative
         # replaceComponent ::xampp::cmake {{cmake version 3.9.6}}
         replaceComponent libmcrypt {autoconf pkgconfig libtool2 ::xampp::libmcrypt}
+    }
+    public method archPlatform {} {
+        return x86_64
     }
     public method preparefordist {} {
         foreach f [glob [file join [$be cget -output] "xamppfiles" postgresql lib libpq.*]] {
@@ -301,13 +304,14 @@
     protected method getXamppOutputDir {} {
         return /Applications/XAMPP/xamppfiles
     }
+
     public method setCompilationVariables {output} {
         set ::env(SHARED_LDFLAGS) "-Wl,-rpath -Wl,$output/lib -L$output/lib"
-        set ::env(LDFLAGS) "-Wl,-rpath -Wl,$output/lib -L$output/lib -I$output/include -arch x86_64"
+        set ::env(LDFLAGS) "-Wl,-rpath -Wl,$output/lib -L$output/lib -I$output/include -arch [archPlatform]"
         set ::env(LD_RUN_PATH) $output/lib
-        set ::env(CPPFLAGS) "-O3 -L$output/lib -I$output/include -I$output/include/ncurses -arch x86_64"
-        set ::env(CFLAGS) "-O3  -L$output/lib -I$output/include -I$output/include/ncurses -arch x86_64"
-        set ::env(CXXFLAGS) "-O3 -L$output/lib -I$output/include"
+        set ::env(CPPFLAGS) "-O3  -I$output/include -I$output/include/ncurses -arch [archPlatform] -mmacosx-version-min=10.15"
+        set ::env(CFLAGS) "-O3  -I$output/include -I$output/include/ncurses -arch [archPlatform] -mmacosx-version-min=10.15"
+        set ::env(CXXFLAGS) "-O3  -I$output/include -mmacosx-version-min=10.15"
         if {[info exists ::env(PATH)]} {
             if {![string match $output/bin:* $::env(PATH)]} {
                 set ::env(PATH) "$output/bin:$::env(PATH)"
@@ -379,6 +383,66 @@
         replaceComponent ::xampp::php81 ::xampp::php82
     }
 }
+::itcl::class osx64XamppInstaller85Stack {
+    inherit osx64XamppInstaller80Stack
+    constructor {environment} {
+        chain $environment
+    } {
+        replaceComponent ::xampp::php80 ::xampp::php85
+    }
+}
+
+::itcl::class osxArm64XamppInstaller80Stack {
+    inherit osx64XamppInstaller80Stack
+    constructor {environment} {
+        chain $environment
+    } {
+        removeComponents ::xampp::gd
+        removeComponents libtool libmcrypt ::xampp::libmcrypt
+        removeComponents ::xampp::imap
+        replaceComponent ::xampp::pcre ::xampp::pcre2
+        removeComponents pkgconfig libtool
+        #removeComponents ::xampp::pecl_ncurses
+        replaceComponent  ::xampp::sqlite2  ::xampp::sqlite3
+        replaceComponent ::xampp::pecl_ncurses ::xampp::pecl_ncurses6
+        replaceComponent ::xampp::php80 {oniguruma {::xampp::php80} ::xampp::gd}
+        #replaceComponent ::xampp::xamppSkeleton ::xampp::xamppSkeletonDev
+    }
+    public method archPlatform {} {
+        return arm64
+    }
+}
+
+::itcl::class osxArm64XamppInstaller85Stack {
+    inherit osxArm64XamppInstaller80Stack
+    constructor {environment} {
+        chain $environment
+    } {
+        replaceComponent ::xampp::php80 ::xampp::php85
+    }
+}
+
+::itcl::class osxArm64XamppInstaller84Stack {
+    inherit osxArm64XamppInstaller80Stack
+    constructor {environment} {
+        chain $environment
+    } {
+        replaceComponent ::xampp::php80 ::xampp::php84
+    }
+}
+
+::itcl::class osxArm64XamppInstaller83Stack {
+    inherit osxArm64XamppInstaller80Stack
+    constructor {environment} {
+        chain $environment
+    } {
+        replaceComponent ::xampp::php80 ::xampp::php83
+    }
+}
+
+
+
+
 # XAMPP Installer - standard version
 ::itcl::class xamppinstallerstack {
     inherit product
@@ -616,11 +680,12 @@ return
                 file copy -force $f [file join [$be cget -output] "xamppfiles" lib]
             }
         }
-        if {[$be targetPlatform] == "osx-x64"} {
+        if {[string match osx* [$be targetPlatform]]} {
             set xamppoutputdir [file join [$be cget -output] xamppfiles]
         } else {
             set xamppoutputdir [file join [$be cget -output] lampp]
         }
+        file mkdir [file join $xamppoutputdir htdocs]
         foreach f [glob [file join [$be cget -output] htdocs-xampp *]] {
             file copy -force $f [file join $xamppoutputdir htdocs]
         }
@@ -639,7 +704,7 @@ return
         ] 1
     }
     public method supportedPlatforms {} {
-        return [concat linux-x64 osx-x64]
+        return [concat linux-x64 osx-x64 osx-arm64]
     }
     public method copyProjectFiles {} {
         chain
@@ -659,7 +724,7 @@ return
                 }
             }
         }
-        if {[$be targetPlatform] != "osx-x64"} {
+        if {![string match osx* [$be targetPlatform]]} {
             set saveLdLibraryPath {}
             if {[info exists ::env(LD_LIBRARY_PATH)]} {
                 set saveLdLibraryPath $::env(LD_LIBRARY_PATH)
@@ -687,7 +752,7 @@ return
                 set destDir [$be cget -output]
                 set virginSrc [file join [$be cget -output] "lampp"]
             }
-            osx-x64 {
+            osx-x64 - osx-arm64 {
                 set relativeTopDir "XAMPP"
                 set destDir [file join [$be cget -output] XAMPP]
                 set installPrefix "XAMPP/xamppfiles"
@@ -1053,7 +1118,7 @@ return
         return $res
     }
     public method supportedPlatforms {} {
-        return {osx-x64}
+        return {osx-x64 osx-arm64}
     }
 }
 

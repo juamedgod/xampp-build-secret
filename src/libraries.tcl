@@ -877,7 +877,7 @@ includesdir = ${includedir}}] 1
         cd [srcdir]
         file mkdir [srcdir]/build
         cd [srcdir]/build
-        eval logexec cmake .. -DCMAKE_INSTALL_PREFIX=[prefix] -DCMAKE_INSTALL_LIBDIR=lib
+        eval logexec cmake .. -DCMAKE_INSTALL_PREFIX=[prefix] -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5
         eval logexec [make]
         if {[$be cget -target] == "osx-x64"} {
             set ::env(DYLD_LIBRARY_PATH) $oldDYLD
