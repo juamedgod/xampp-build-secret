@@ -2740,6 +2740,9 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
             # }
             showEnvironmentVars
             if {[string match osx* [$be targetPlatform]]} {
+
+                set ::env(LIBZIP_LIBS) "-L[prefix]/lib -lzip"
+                set ::env(LIBZIP_CFLAGS) "-I[prefix]/include"
                 xampptcl::util::substituteParametersInFile ./configure [list {$BZ2_SHARED_LIBADD} "-Wl,-rpath,[prefix]/lib"]
                 #     file mkdir [srcdir]/configure-libs
                 foreach f [glob [prefix]/lib/libbz2.*] {
