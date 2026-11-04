@@ -2706,7 +2706,7 @@ $cfg['Servers'][$i]['favorite'] = 'pma__favorite';} \
 
             # Specific options for PHP 7.4.x
             if {[xampptcl::util::compareVersions $version "7.4.0"] >= 0} {
-                lappend opts --with-pear --enable-gd --with-jpeg --with-libwebp --with-freetype --with-zip
+                lappend opts --with-pear --enable-gd --with-jpeg --with-libwebp --with-freetype --with-zip=[prefix]
             }
 
             set opts [listFilter $opts [list --with-oci8*]]
