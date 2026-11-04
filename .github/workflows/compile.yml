@@ -17,6 +17,11 @@ jobs:
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
             extra_binaries: |
+          - os: osx-arm64
+            runner: macos-15
+            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
+            base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
+            extra_binaries: |
 
 
     runs-on: ${{ matrix.runner }}
@@ -24,7 +29,9 @@ jobs:
       BITNAMI_BUILD_DIRECTORY: "/opt/build"
     steps:
       - name: Delete huge unnecessary tools folder
-        run: rm -rf /opt/hostedtoolcache
+        run: |
+          du -shc "$RUNNER_TOOL_CACHE/"*
+          rm -rf "$RUNNER_TOOL_CACHE"
       - uses: actions/checkout@v4
       - name: Setup /bitnami dir
         id: setup-bitnami-dir
@@ -49,7 +56,10 @@ jobs:
           curl --fail --show-error --silent -L -o tclkit 'https://tclkits.rkeene.org/fossil/raw/tclkit-8.5.17-rhel5-x86_64?name=76a197fe41359daaf4f90a2001f46675b3667e26'
           chmod 755 tclkit
           sudo mv tclkit /usr/local/bin
-
+      - name: Install macOS dependencies
+        if: matrix.os == 'osx-arm64'
+        run: |
+           echo Nothing to do for macOS
       - name: Get tarballs
         id: get-tarballs
         if: steps.cache-tarballs.outputs.cache-hit != 'true'
@@ -94,4 +104,4 @@ jobs:
         with:
           name: xampp-${{matrix.version}}-${{matrix.os}}
           path: |
-            $BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}/*
+            ${{env.BITNAMI_BUILD_DIRECTORY}}/dist-${{matrix.version}}-${{matrix.os}}/*
