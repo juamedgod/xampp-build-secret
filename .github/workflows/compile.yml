@@ -23,6 +23,8 @@ jobs:
     env:
       BITNAMI_BUILD_DIRECTORY: "/opt/build"
     steps:
+      - name: Delete huge unnecessary tools folder
+        run: rm -rf /opt/hostedtoolcache
       - uses: actions/checkout@v4
       - name: Setup /bitnami dir
         id: setup-bitnami-dir
