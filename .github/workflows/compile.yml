@@ -21,20 +21,14 @@ jobs:
             runner: ubuntu-22.04
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-            extra_binaries: |
-                https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
           - os: osx-arm64
             runner: macos-15
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-            extra_binaries: |
-                https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
           - os: osx-x64
             runner: macos-15-intel
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-            extra_binaries: |
-                https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
 
 
     runs-on: ${{ matrix.runner }}
