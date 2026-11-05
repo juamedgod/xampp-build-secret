@@ -5,17 +5,7 @@ on:
     tags:
       - "tarballs/20[0-9]*"
   workflow_dispatch:
-    inputs:
-      os:
-        description: OS target to build
-        type: choice
-        required: true
-        default: all
-        options:
-          - all
-          - linux-x64
-          - osx-arm64
-          - osx-x64
+
 permissions:
   contents: read
 
@@ -26,16 +16,16 @@ jobs:
       matrix:
         version: [85]
         # os: [linux-x64, osx-arm64, osx-x64]
-        os: ${{ fromJSON(inputs.os != '' && inputs.os != 'all' && format('["{0}"]', inputs.os) || '["linux-x64","osx-arm64","osx-x64"]') }}
+        os: [osx-x64]
         include:
-          - os: linux-x64
-            runner: ubuntu-22.04
-            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
-            base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-          - os: osx-arm64
-            runner: macos-15
-            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
-            base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
+          # - os: linux-x64
+          #   runner: ubuntu-22.04
+          #   base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
+          #   base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
+          # - os: osx-arm64
+          #   runner: macos-15
+          #   base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
+          #   base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
           - os: osx-x64
             runner: macos-15-intel
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
