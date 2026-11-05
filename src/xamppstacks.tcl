@@ -358,6 +358,13 @@
         removeComponents ::xampp::gd
         replaceComponent ::xampp::php {oniguruma {::xampp::php80} ::xampp::gd}
         replaceComponent ::xampp::xamppSkeleton ::xampp::xamppSkeletonDev
+
+        removeComponents libtool libmcrypt ::xampp::libmcrypt
+        removeComponents ::xampp::imap
+        replaceComponent ::xampp::pcre ::xampp::pcre2
+        removeComponents pkgconfig libtool
+        replaceComponent  ::xampp::sqlite2  ::xampp::sqlite3
+        replaceComponent ::xampp::pecl_ncurses ::xampp::pecl_ncurses6
     }
     public method componentsToBuild {} {
         if {[$be cget -buildType]=="fromTarball"} {
@@ -397,15 +404,15 @@
     constructor {environment} {
         chain $environment
     } {
-        removeComponents ::xampp::gd
-        removeComponents libtool libmcrypt ::xampp::libmcrypt
-        removeComponents ::xampp::imap
-        replaceComponent ::xampp::pcre ::xampp::pcre2
-        removeComponents pkgconfig libtool
+        #removeComponents ::xampp::gd
+        #removeComponents libtool libmcrypt ::xampp::libmcrypt
+        # removeComponents ::xampp::imap
+        # replaceComponent ::xampp::pcre ::xampp::pcre2
+        # removeComponents pkgconfig libtool
         #removeComponents ::xampp::pecl_ncurses
-        replaceComponent  ::xampp::sqlite2  ::xampp::sqlite3
-        replaceComponent ::xampp::pecl_ncurses ::xampp::pecl_ncurses6
-        replaceComponent ::xampp::php80 {oniguruma {::xampp::php80} ::xampp::gd}
+        # replaceComponent  ::xampp::sqlite2  ::xampp::sqlite3
+        # replaceComponent ::xampp::pecl_ncurses ::xampp::pecl_ncurses6
+        #replaceComponent ::xampp::php80 {oniguruma {::xampp::php80} ::xampp::gd}
         #replaceComponent ::xampp::xamppSkeleton ::xampp::xamppSkeletonDev
     }
     public method archPlatform {} {
