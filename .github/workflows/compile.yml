@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         version: [85]
-        os: [linux-x64, osx-arm64]
+        os: [linux-x64, osx-arm64, osx-x64]
         include:
           - os: linux-x64
             runner: ubuntu-22.04
