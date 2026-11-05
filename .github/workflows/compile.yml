@@ -3,9 +3,7 @@ run-name: Build by ${{ github.actor }}
 on:
   push:
     tags:
-      - "v*.*.*"
-      # Date style (we expect 20xx year, it will byte us in 70 years...)
-      - "20[0-9]*"
+      - "tarballs/20[0-9]*"
   workflow_dispatch:
 
 permissions:
@@ -23,12 +21,14 @@ jobs:
             runner: ubuntu-22.04
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-            extra_binaries: |
           - os: osx-arm64
             runner: macos-15
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-            extra_binaries: |
+          - os: osx-x64
+            runner: macos-15-intel
+            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
+            base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
 
 
     runs-on: ${{ matrix.runner }}
