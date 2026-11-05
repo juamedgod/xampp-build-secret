@@ -5,7 +5,17 @@ on:
     tags:
       - "tarballs/20[0-9]*"
   workflow_dispatch:
-
+    inputs:
+      os:
+        description: OS target to build
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - linux-x64
+          - osx-arm64
+          - osx-x64
 permissions:
   contents: read
 
@@ -15,7 +25,8 @@ jobs:
       fail-fast: false
       matrix:
         version: [85]
-        os: [linux-x64, osx-arm64, osx-x64]
+        # os: [linux-x64, osx-arm64, osx-x64]
+        os: ${{ fromJSON(inputs.os != '' && inputs.os != 'all' && format('["{0}"]', inputs.os) || '["linux-x64","osx-arm64","osx-x64"]') }}
         include:
           - os: linux-x64
             runner: ubuntu-22.04
