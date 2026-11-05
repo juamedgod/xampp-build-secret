@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         version: [85]
-        os: [linux-x64, osx-arm64, osx-x64]
+        os: [linux-x64, osx-arm64]
         include:
           - os: linux-x64
             runner: ubuntu-22.04
@@ -25,10 +25,11 @@ jobs:
             runner: macos-15
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
             base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
-          - os: osx-x64
-            runner: macos-15-intel
-            base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
-            base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
+          # Extremelly slow on macos-15-intel and fails. We should investigate crosscompiling on ARM
+          # - os: osx-x64
+          #   runner: macos-15-intel
+          #   base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
+          #   base_tarball_sha256: "ff671cf2d42de23b9ad5a940345ce7dcb209e52a9176ca5c4c82f5f638c2e2c8"
 
 
     runs-on: ${{ matrix.runner }}
