@@ -102,7 +102,6 @@
     constructor {environment} {
         chain $environment
     } {
-        replaceComponent ::xampp::zziplib {{::xampp::zziplib version 0.13.62}}
         replaceComponent gd {libltdl ::xampp::gd}
         replaceComponent ::xampp::MDB {{::xampp::MDB2}}
         replaceComponent ::xampp::HTML_Form {{::xampp::HTML_QuickForm2}}
@@ -193,7 +192,6 @@
     constructor {environment} {
         chain $environment
     } {
-        replaceComponent ::xampp::zziplib {{::xampp::zziplib version 0.13.62}}
         replaceComponent ::xampp::oracleInstantclientLinuxX86Lib ::xampp::oracleInstantclientLinuxX64Lib
         replaceComponent ::xampp::oracleInstantclientLinuxX86Sdk  ::xampp::oracleInstantclientLinuxX64Sdk
     }
@@ -275,7 +273,6 @@
     } {
         removeComponents [list chrpath]
         replaceComponent gd {::xampp::gd}
-        replaceComponent ::xampp::zziplib {{::xampp::zziplib version 0.13.62}}
         replaceComponent ::xampp::oracleInstantclientLinuxX86Lib ::xampp::oracleInstantclientOsxX64Lib
         replaceComponent ::xampp::oracleInstantclientLinuxX86Sdk ::xampp::oracleInstantclientOsxX64Sdk
         # replaceComponent ::xampp::libiconv libiconvOsxNative

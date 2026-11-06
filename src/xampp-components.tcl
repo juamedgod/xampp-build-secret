@@ -1287,7 +1287,7 @@ UseFtpUsers}]
             set licenseNotes http://curl.haxx.se/legal/licmix.html
         }
         public method configureOptions {} {
-            return [concat [chain] [list --without-libpsl --with-ssl=[prefix] --without-nghttp2 --without-libidn2 --with-ca-bundle=[file join [$be cget -output] share/curl/curl-ca-bundle.crt]]]
+            return [concat [chain] [list --with-libpsl=[prefix]/lib --with-ssl=[prefix] --without-nghttp2 --without-libidn2 --with-ca-bundle=[file join [$be cget -output] share/curl/curl-ca-bundle.crt]]]
         }
         public method setEnvironment {} {
             chain
@@ -2276,20 +2276,14 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "zziplib"
-            set version 0.13.23
+            set version 0.13.80
             set supportsParallelBuild 0
-            # this one requires python, not available in the xampp chroot...
-            #set version 0.13.62
             set licenseRelativePath COPYING.LIB
         }
-        public method configureOptions {} {
-            return [concat [chain] [list --with-zlib=[prefix]]]
-        }
         public method build {} {
-
-            xampptcl::util::substituteParametersInFile [srcdir]/Makefile.in  [list {zzip zzipwrap bins test docs} {zzip zzipwrap bins test}]
-            xampptcl::util::substituteParametersInFile [srcdir]/bins/zziptest.c [list {(char *)hdr += hdr->d_reclen;} {hdr = (char *)hdr + hdr->d_reclen;}]
-            chain
+            cd [srcdir]
+            eval logexec cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=[prefix]
+            eval logexec cmake --build .
         }
     }
 

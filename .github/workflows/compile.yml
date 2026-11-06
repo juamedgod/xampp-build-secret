@@ -24,6 +24,9 @@ jobs:
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/brotli-1.2.1.tar.gz 98d35d11a78dc453aebb7d10c3748f3f73ff78c8267c0dc697b8631f67bf7e8f
                 https://sourceforge.net/projects/xampp/files/thirdparties/tiff-4.7.2.tar.gz 672bd7d10aee4606171afb864f3570b83340f6a33e2c186dc0512f7145ffdf6a
+                https://sourceforge.net/projects/xampp/files/thirdparties/libpsl-0.23.3.tar.gz 93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be
+                https://sourceforge.net/projects/xampp/files/thirdparties/libzip-1.12.1.tar.xz c40062022a1963c80573d48f6070792297cecd7c6bffe3aefcac0d8b9bee8913
+                https://sourceforge.net/projects/xampp/files/thirdparties/zziplib-0.13.80.tar.gz 21f40d111c0f7a398cfee3b0a30b20c5d92124b08ea4290055fbfe7bdd53a22c
           - os: osx-arm64
             runner: macos-15
             base_tarball: "https://sourceforge.net/projects/xampp/files/thirdparties/20261103/tarballs-unix-202611.tgz"
@@ -31,6 +34,10 @@ jobs:
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/brotli-1.2.1.tar.gz 98d35d11a78dc453aebb7d10c3748f3f73ff78c8267c0dc697b8631f67bf7e8f
                 https://sourceforge.net/projects/xampp/files/thirdparties/tiff-4.7.2.tar.gz 672bd7d10aee4606171afb864f3570b83340f6a33e2c186dc0512f7145ffdf6a
+                https://sourceforge.net/projects/xampp/files/thirdparties/libpsl-0.23.3.tar.gz 93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be
+                https://sourceforge.net/projects/xampp/files/thirdparties/libzip-1.12.1.tar.xz c40062022a1963c80573d48f6070792297cecd7c6bffe3aefcac0d8b9bee8913
+                https://sourceforge.net/projects/xampp/files/thirdparties/zziplib-0.13.80.tar.gz 21f40d111c0f7a398cfee3b0a30b20c5d92124b08ea4290055fbfe7bdd53a22c
+
           # Extremelly slow on macos-15-intel and fails. We should investigate crosscompiling on ARM
           # - os: osx-x64
           #   runner: macos-15-intel

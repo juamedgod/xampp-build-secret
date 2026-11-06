@@ -13,6 +13,7 @@ declareClass libuuid -parentClass library -name libuuid -version 1.0.3
 declareClass lcms -parentClass library -version 1.18
 declareClass openexr -parentClass library -version 2.2.0
 declareClass libwebp -parentClass library -version 1.6.0
+declareClass libpsl -parentClass library -version 0.23.3
 declareClass ilmbase -parentClass library -version 2.2.0
 declareClass flex -parentClass library -name flex -version 2.6.4
 declareClass harfbuzz -parentClass library -name harfbuzz -version 1.6.0
@@ -853,7 +854,7 @@ includesdir = ${includedir}}] 1
         chain $environment
     } {
         set name libzip
-        set version 1.5.1
+        set version 1.12.1
         set licenseRelativePath LICENSE
     }
     public method install {} {
