@@ -165,7 +165,7 @@ jobs:
           fi
           echo "${{ matrix.base_tarball_sha256 }}  $BASE_FILE" | sha256sum -c -
           # Windows expects the contents of the base file
-          if [[ "${{matrix.os}}" == "windows-x64"]]; then
+          if [[ "${{matrix.os}}" == "windows-x64" ]]; then
             echo "Extracting $BASE_FILE ..."
             tar -xzf "$BASE_FILE"
           fi
