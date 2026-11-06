@@ -156,7 +156,7 @@ jobs:
         if: steps.cache-tarballs.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
-          mkdir /tmp/tarballs
+          mkdir -p /tmp/tarballs
           cd /tmp/tarballs/
           BASE_FILE=$(basename '${{ matrix.base_tarball }}')
           if [[ ! -f "/tmp/tarballs/$BASE_FILE" ]]; then
