@@ -948,6 +948,18 @@ namespace eval xampp {
         }
     }
 
+    ::itcl::class libpsl {
+        inherit xamppLibrary
+        constructor {environment} {
+            chain $environment
+        } {
+            set name "libpsl"
+            set version 0.23.3
+        }
+        public method configureOptions {} {
+            return [concat [chain] [list --enable-runtime=libicu --enable-builtin=libicu]]
+        }
+    }
 
     ::itcl::class openldap {
         inherit xamppLibrary
