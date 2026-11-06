@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  IB_VERSION: 26.4.0
+  IB_VERSION: 26.8.0
+  IB_SHA256: "95581d5d5f1104a85133724f17cdf05e83130982cda193e9efd98feaa6e145d4"
 jobs:
   build-xampp:
     strategy:
@@ -82,6 +83,19 @@ jobs:
         run: |
           sudo mkdir /bitnami
           sudo chown "$USER:$USER" /bitnami
+      - name: Get base tarball filename
+        id: base_tarball
+        env:
+          URL: ${{ matrix.base_tarball }}
+        run: |
+          echo "filename=$(basename "${URL%%\?*}")" >> "$GITHUB_OUTPUT"
+      - name: Restore base tarball cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/tarballs/${{ steps.base_tarball.outputs.filename }}
+          key: base-tarball-${{ matrix.base_tarball_sha256 }}
+
       - name: Cache tarballs
         id: cache-tarballs
         uses: actions/cache@v5
@@ -96,17 +110,31 @@ jobs:
           curl --fail --show-error --silent -L -o tclkit 'https://tclkits.rkeene.org/fossil/raw/tclkit-8.5.17-rhel5-x86_64?name=76a197fe41359daaf4f90a2001f46675b3667e26'
           chmod 755 tclkit
           sudo mv tclkit /usr/local/bin
+      - name: Cache InstallBuilder
+        id: cache-installbuilder
+        uses: actions/cache@v5
+        with:
+          path: /opt/installbuilder.run
+          key: ${{ env.IB_SHA256 }}
+
       - name: Install InstallBuilder
         id: install-ib
         run: |
           set -euo pipefail
-          curl --fail --show-error --silent -L -o installbuilder.run "https://releases.installbuilder.com/installbuilder/installbuilder-professional-${{ env.IB_VERSION }}-linux-x64-installer.run"
+          cd /opt/
+          if [[ ! -f "/opt/installbuilder.run" ]]; then
+            echo "Downloading InstallBuilder"
+            curl --fail --show-error --silent -L -o installbuilder.run "https://releases.installbuilder.com/installbuilder/installbuilder-professional-${{ env.IB_VERSION }}-linux-x64-installer.run"
+          else
+             echo "Using cached InstallBuilder"
+          fi
+          echo "${{ env.IB_SHA256 }}  installbuilder.run" | sha256sum -c -
           chmod 755 installbuilder.run
           sudo ./installbuilder.run --mode unattended --prefix /opt/installbuilder
           sudo chown -R "$USER:$USER" /opt/installbuilder
           ln -sf /opt/installbuilder ~/installbuilder-${{env.IB_VERSION}}
           echo "${{env.IB_VERSION}}" > /opt/installbuilder/ibversion
-          rm installbuilder.run
+
       - name: Register License
         id: register-license
         env:
@@ -121,15 +149,20 @@ jobs:
           set -euo pipefail
           mkdir /tmp/tarballs
           cd /tmp/tarballs/
-          echo "Downloading base tarball..."
-          curl --fail --show-error --silent --retry 3 -L \
-            -O '${{ matrix.base_tarball }}'
           BASE_FILE=$(basename '${{ matrix.base_tarball }}')
+          if [[ ! -f "/tmp/tarballs/$BASE_FILE" ]]; then
+            echo "Downloading base tarball..."
+            curl --fail --show-error --silent --retry 3 -L \
+              -O '${{ matrix.base_tarball }}'
+          else
+            echo "Found local file $BASE_FILE"
+          fi
           echo "${{ matrix.base_tarball_sha256 }}  $BASE_FILE" | sha256sum -c -
-
-          echo "Extracting $BASE_FILE ..."
-          tar -xzf "$BASE_FILE"
-
+          # Windows expects the contents of the base file
+          if [[ "${{matrix.os}}" == "windows-x64"]]; then
+            echo "Extracting $BASE_FILE ..."
+            tar -xzf "$BASE_FILE"
+          fi
           echo "Downloading extra binaries..."
           while read -r url sha; do
             [ -z "$url" ] && continue
