@@ -34,6 +34,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
                 https://github.com/ApacheFriends/web/releases/download/20261104/xampp-htdocs-osx-20261104.tar.gz c8c1189f9ab976c97ba4bcf2f072afeaac61c25afebb1c0074e8b94eb24953a5
                 https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip 2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f
+                https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: osx-arm64
             version: 84
             base_tarball: "https://github.com/ApacheFriends/xampp-build/releases/download/tarballs%2F20261105/xampp84-osx-arm64-20261105.tar.gz"
@@ -42,6 +43,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
                 https://github.com/ApacheFriends/web/releases/download/20261104/xampp-htdocs-osx-20261104.tar.gz c8c1189f9ab976c97ba4bcf2f072afeaac61c25afebb1c0074e8b94eb24953a5
                 https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip 2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f
+                https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: osx-arm64
             version: 83
             base_tarball: "https://github.com/ApacheFriends/xampp-build/releases/download/tarballs%2F20261105/xampp83-osx-arm64-20261105.tar.gz"
@@ -50,6 +52,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
                 https://github.com/ApacheFriends/web/releases/download/20261104/xampp-htdocs-osx-20261104.tar.gz c8c1189f9ab976c97ba4bcf2f072afeaac61c25afebb1c0074e8b94eb24953a5
                 https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip 2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f
+                https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: linux-x64
             version: 85
             base_tarball: "https://github.com/ApacheFriends/xampp-build/releases/download/tarballs%2F20261105/xampp85-linux-x64-20261105.tar.gz"
@@ -58,6 +61,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
                 https://github.com/ApacheFriends/web/releases/download/20261104/xampp-htdocs-linux-20261104.tar.gz 7fec3bf27310d4c708b7cde4ebbaf0e284ec582d6d634590a37d97bd619e6e2c
                 https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip 2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f
+                https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: linux-x64
             version: 84
             base_tarball: "https://github.com/ApacheFriends/xampp-build/releases/download/tarballs%2F20261105/xampp84-linux-x64-20261105.tar.gz"
@@ -66,6 +70,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
                 https://github.com/ApacheFriends/web/releases/download/20261104/xampp-htdocs-linux-20261104.tar.gz 7fec3bf27310d4c708b7cde4ebbaf0e284ec582d6d634590a37d97bd619e6e2c
                 https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip 2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f
+                https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: linux-x64
             version: 83
             base_tarball: "https://github.com/ApacheFriends/xampp-build/releases/download/tarballs%2F20261105/xampp83-linux-x64-20261105.tar.gz"
@@ -74,6 +79,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
                 https://github.com/ApacheFriends/web/releases/download/20261104/xampp-htdocs-linux-20261104.tar.gz 7fec3bf27310d4c708b7cde4ebbaf0e284ec582d6d634590a37d97bd619e6e2c
                 https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip 2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f
+                https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
 
     runs-on: ubuntu-latest
     steps:
