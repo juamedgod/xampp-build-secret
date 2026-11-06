@@ -5,7 +5,7 @@
            chain $environment
        } {
            addComponents baseFiles
-           addComponents m4 libtool ::xampp::pcre ::xampp::zlib ::xampp::brotli ::xampp::libiconv
+           addComponents m4 libtool ::xampp::pcre2 ::xampp::zlib ::xampp::brotli ::xampp::libiconv
            addComponents ::xampp::gettext
 	   # addComponents ::xampp::cmake
 
@@ -358,7 +358,6 @@
 
         removeComponents libtool libmcrypt ::xampp::libmcrypt
         removeComponents ::xampp::imap
-        replaceComponent ::xampp::pcre ::xampp::pcre2
         removeComponents pkgconfig libtool
         replaceComponent  ::xampp::sqlite2  ::xampp::sqlite3
         replaceComponent ::xampp::pecl_ncurses ::xampp::pecl_ncurses6
