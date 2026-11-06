@@ -5,7 +5,7 @@
            chain $environment
        } {
            addComponents baseFiles
-           addComponents m4 libtool ::xampp::pcre ::xampp::zlib ::xampp::libiconv
+           addComponents m4 libtool ::xampp::pcre ::xampp::zlib ::xampp::brotli ::xampp::libiconv
            addComponents ::xampp::gettext
 	   # addComponents ::xampp::cmake
 

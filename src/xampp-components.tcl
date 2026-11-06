@@ -1560,7 +1560,7 @@ UseFtpUsers}]
                                          --with-apr-util=[prefix]/bin/apu-1-config --with-pcre=[prefix] --enable-modules=all]]
             lappend list --enable-ssl --with-ssl=$::opts(openssl.prefix)
 
-            lappend list --disable-brotli
+            lappend list --with-brotli=[prefix]
             return $list
         }
         public method build {} {
@@ -1629,7 +1629,22 @@ UseFtpUsers}]
         }
     }
 
-
+    ::itcl::class brotli {
+        inherit xamppLibrary
+        constructor {environment} {
+            chain $environment
+        } {
+            set name brotli
+            set version 1.2.1
+            set licenseRelativePath LICENSE
+            set supportsParallelBuild 1
+        }
+        public method build {} {
+            cd [srcdir]
+            eval logexec cmake . -DCMAKE_INSTALL_PREFIX=[prefix] -DCMAKE_BUILD_TYPE=Release
+            eval logexec [make]
+        }
+    }
     ::itcl::class pbxt {
         inherit xamppLibrary
         constructor {environment} {
