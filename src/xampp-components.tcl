@@ -1757,6 +1757,7 @@ UseFtpUsers}]
 
         public method setEnvironment {} {
             set ::opts(sqlite2.prefix) [prefix]
+            set ::opts(sqlite.prefix) [prefix]
         }
 
         public method configureOptions {} {
