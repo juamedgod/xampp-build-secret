@@ -948,6 +948,16 @@ namespace eval xampp {
         }
     }
 
+    ::itcl::class readline {
+        inherit xamppLibrary
+        constructor {environment} {
+            chain $environment
+        } {
+            set name "readline"
+            set version 8.3
+        }
+    }
+
     ::itcl::class libpsl {
         inherit xamppLibrary
         constructor {environment} {
