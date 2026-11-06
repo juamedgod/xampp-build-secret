@@ -76,10 +76,8 @@ jobs:
             -O '${{ matrix.base_tarball }}'
           BASE_FILE=$(basename '${{ matrix.base_tarball }}')
           echo "${{ matrix.base_tarball_sha256 }}  $BASE_FILE" | sha256sum -c -
-          pwd
           echo "Extracting $BASE_FILE ..."
           tar -xzf "$BASE_FILE"
-          find /tmp/tarballs
           echo "Downloading extra binaries..."
           while read -r url sha; do
             [ -z "$url" ] && continue
@@ -96,7 +94,6 @@ jobs:
           export BITNAMI_BUILD_DIRECTORY=${{env.BITNAMI_BUILD_DIRECTORY}}
           sudo mkdir "$BITNAMI_BUILD_DIRECTORY"
           sudo chown "$USER" "$BITNAMI_BUILD_DIRECTORY"
-          find /tmp/tarballs
           tclsh createstack.tcl buildTarball xamppunixinstaller${{matrix.version}}stack ${{matrix.os}}
           mkdir "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"
           mv $BITNAMI_BUILD_DIRECTORY/output/* "$BITNAMI_BUILD_DIRECTORY/dist-${{matrix.version}}-${{matrix.os}}"

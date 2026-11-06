@@ -2353,7 +2353,7 @@ UseFtpUsers}]
                         -DENABLE_FREETYPE=1 -DFREETYPE_INCLUDE_DIRS=[$be cget -output]/include \
                         -DENABLE_WEBP=1 -DWEBP_INCLUDE_DIR=[$be cget -output]/include/webp]
         }
-		 public method configureOptions {} {
+        public method configureOptions {} {
             return [concat [chain] [list --without-fontconfig --without-xpm --with-png=[prefix] --with-zlib=[prefix] --with-jpeg=[prefix] --with-tiff=[prefix] --with-freetype=[prefix] --with-webp=[prefix]]]
         }
 

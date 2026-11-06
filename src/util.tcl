@@ -1681,8 +1681,7 @@ namespace eval xampptcl::util {
         }
         return $result
     }
-proc copyDirectory {origin destination} {
-    puts "$origin -> $destination"
+    proc copyDirectory {origin destination} {
         if {$::tcl_platform(os) == "Darwin"} {
             exec cp -Rp $origin $destination
         } else {
