@@ -64,6 +64,8 @@ jobs:
       - name: Install Linux dependencies
         if: matrix.os == 'linux-x64'
         run: |
+          set -x
+          echo $(which awk)
           sudo apt-get update
           sudo apt-get install -y build-essential libssl-dev
           sudo apt-get install -y --no-install-recommends \
@@ -76,6 +78,8 @@ jobs:
       - name: Install macOS dependencies
         if: matrix.os == 'osx-arm64'
         run: |
+           set -x
+           echo $(which awk)
            echo Nothing to do for macOS
       - name: Get tarballs
         id: get-tarballs
