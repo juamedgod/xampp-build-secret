@@ -668,7 +668,7 @@ namespace eval xampp {
         public method install {} {
             chain
             cd [prefix]/lib
-            if {[$be targetPlatform] == "osx-x64"} {
+            if {[string match osx* [$be targetPlatform]]} {
                 set compatVersion [join [lrange [split $version .] 0 1] .]
                 exec ln -sf libbz2.$version.dylib libbz2.dylib
                 exec ln -sf libbz2.$version.dylib libbz2.$compatVersion.dylib
@@ -677,7 +677,7 @@ namespace eval xampp {
         public method build {} {
             cd [srcdir]
             set compatVersion [join [lrange [split $version .] 0 1] .]
-            if {[$be targetPlatform] == "osx-x64"} {
+            if {[string match osx* [$be targetPlatform]]} {
                 set dylibTarget [format [join [list {libbz2.dylib: $(OBJS)} \
                                                    {rm -f libbz2.dylib} {$(CC) -dynamiclib $(OBJS) -o libbz2.%s.dylib -install_name $(PREFIX)/lib/libbz2.%s.dylib -compatibility_version %s -current_version %s} \
                                                    {ln -s libbz2.%s.dylib libbz2.%s.dylib} \
@@ -743,6 +743,14 @@ namespace eval xampp {
             set name "freetype"
             set version 2.4.8
         }
+        public method configureOptions {} {
+            set args [chain]
+            if {[string match osx* [$be cget -target]]} {
+                set args [concat $args [list  "ZLIB_LIBS=-L[prefix]/lib -lz -lbz2" "BZIP2_LIBS=-L[prefix]/lib -bz2" --without-harfbuzz]]
+            }
+            return $args
+        }
+
         public method setEnvironment {} {
             chain
             addIncludesDir [prefix]/include/freetype2

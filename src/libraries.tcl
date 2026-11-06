@@ -883,6 +883,7 @@ includesdir = ${includedir}}] 1
         cd [srcdir]/build
         set cmakeArgs [list -DCMAKE_INSTALL_PREFIX=[prefix] -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_NETTLE=OFF -DENABLE_GNUTLS=OFF -DENABLE_MBEDTLS=OFF -DBUILD_REGRESS=OFF  -DBUILD_EXAMPLES=OFF -DENABLE_ZSTD=OFF]
         if {[string match osx* [$be cget -target]]} {
+            lappend cmakeArgs -DBZIP2_LIBRARY_RELEASE=[prefix]/lib/libbz2.dylib  -DZLIB_LIBRARY_RELEASE=[prefix]/lib/libz.dylib -DENABLE_LZMA=OFF
             lappend cmakeArgs {-DENABLE_OPENSSL=OFF}
         }
 
