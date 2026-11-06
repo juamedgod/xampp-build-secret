@@ -2175,12 +2175,12 @@ UseFtpUsers}]
             chain $environment
         } {
             set name "tiff"
-	        set version 4.0.1
+	        set version 4.7.2
 
-            set licenseRelativePath COPYRIGHT
+            set licenseRelativePath LICENSE.md
         }
-        public method callConfigure {} {
-	    chain
+        public method configureOptions {} {
+	    return [concat [chain] [list --with-jpeg-include-dir=[prefix]/include --with-jpeg-lib-dir=[prefix]/include --disable-jbig --disable-libdeflate]]
         }
     }
 
