@@ -1783,7 +1783,7 @@ UseFtpUsers}]
         }
 
         public method configureOptions {} {
-            return [list --prefix=[prefix]]
+            return [list --prefix=[prefix] --disable-readline]
         }
         public method build {} {
             cd [srcdir]

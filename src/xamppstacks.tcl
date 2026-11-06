@@ -11,7 +11,10 @@
 
            # ming requires it
            addComponents bison flex
-           addComponents ::xampp::ncurses6 ::xampp::bzip2 ::xampp::libpng ::xampp::jpeg ::xampp::tiff ::xampp::freetype libwebp libzip gd ::xampp::opensslVersioned ::xampp::openldap libmcrypt ::xampp::icu4c ::xampp::libpsl ::xampp::curl ::xampp::imap ::xampp::expatLib ::xampp::libxml2 ::xampp::libxslt ::xampp::apr ::xampp::aprutil ::xampp::readline
+           addComponents ::xampp::ncurses6 ::xampp::bzip2 ::xampp::libpng ::xampp::jpeg ::xampp::tiff ::xampp::freetype libwebp libzip gd ::xampp::opensslVersioned ::xampp::openldap libmcrypt ::xampp::icu4c ::xampp::libpsl ::xampp::curl ::xampp::imap ::xampp::expatLib ::xampp::libxml2 ::xampp::libxslt ::xampp::apr ::xampp::aprutil
+           # TODO: this needs more work. If fails on github actions: gawk: symbol lookup error: /opt/lampp/lib/libreadline.so.8: undefined symbol: UP
+           # We may need to remove some of the included libraries
+           # addComponents ::xampp::readline
            addComponents chrpath ::xampp::oracleInstantclientLinuxX86Lib ::xampp::oracleInstantclientLinuxX86Sdk
            addComponents ::xampp::nghttp2 ::xampp::apache ::xampp::freetds  ::xampp::sqlite3  ::xampp::postgresql groff ::xampp::mariadb10 ::xampp::sablotron ::xampp::gdbm  ::xampp::perl libaio ::xampp::php ::xampp::phpPdfClasses ::xampp::fpdf ::xampp::ming ::xampp::pecl_radius ::xampp::pecl_ncurses ::xampp::modperl cpanArchiveZip cpanYAML cpanXSBuilder cpanIoZlib cpanBundleCpan cpanURI cpanIoCompress cpanHTML-Parser cpanHTML-Tagset cpanMakeMaker cpanParseRecDescent cpanDevelCheckLib cpanDBI cpanDBD-mariadb ::xampp::cpanLWP cpanDBDPgPP cpanDBD-SQLite ::xampp::libapreq2 ::xampp::zziplib ::xampp::proftpd ::xampp::mhash ::xampp::webalizer ::xampp::phpmyadmin
 
