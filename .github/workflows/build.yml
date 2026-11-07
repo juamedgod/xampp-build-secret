@@ -31,7 +31,7 @@ jobs:
                 https://github.com/ApacheFriends/web/releases/download/20261107/xampp-htdocs-windows-20261107.tar.gz e3b8fb3815eb2817944f419a80c2ac7ccbad1abd428b2e1017cd65e64b6bc7b2
           - os: osx-arm64
             version: 85
-            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp85-osx-arm64-20261106.tar.gz"
+            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp85-osx-arm64-20261107.tar.gz"
             base_tarball_sha256: "089d9521e8c2516de920004e00ab5aa32c0c067b983efaee8564d459d9328780"
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
@@ -40,7 +40,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: osx-arm64
             version: 84
-            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp84-osx-arm64-20261106.tar.gz"
+            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp84-osx-arm64-20261107.tar.gz"
             base_tarball_sha256: "aa5a94a64677fb7e4ce0bddafc15d661fc937bc3a8b08f7251839d2bf0aeb6de"
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
@@ -49,7 +49,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: osx-arm64
             version: 83
-            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp83-osx-arm64-20261106.tar.gz"
+            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp83-osx-arm64-20261107.tar.gz"
             base_tarball_sha256: "af22759a9663d08345302ab2d44af2162c7b7f2ea6339183d9b78d68a70bb8d6"
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
@@ -58,7 +58,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: linux-x64
             version: 85
-            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp85-linux-x64-20261106.tar.gz"
+            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp85-linux-x64-20261107.tar.gz"
             base_tarball_sha256: "ed849a6b5a95fc534f4142fe9696b751817d29da6cb75974520f0ba9532e207e"
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
@@ -67,7 +67,7 @@ jobs:
                 https://sourceforge.net/projects/xampp/files/xampp-skeleton/xampp-skeleton-dev-unix-1.8.6-12.tar.gz 0e0f4a4da3bacfcf2539a62cd23c056e3851d3b375c44b22ff4182db67ad1819
           - os: linux-x64
             version: 84
-            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp84-linux-x64-20261106.tar.gz"
+            base_tarball: "https://github.com/juamedgod/xampp-build-secret/releases/download/tarballs%2F20261108/xampp84-linux-x64-20261107.tar.gz"
             base_tarball_sha256: "b92a01166d027bb155f03342cbe472133f66af5bd7e8b1297503c4c6748151ce"
             extra_binaries: |
                 https://sourceforge.net/projects/xampp/files/thirdparties/20261103/curl-ca-bundle-2026-11-05.crt 427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285
